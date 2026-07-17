@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Cause:wght@100..900&family=Montenegrin+Gothic+One&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Arimo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montenegrin Gothic One", "Cause", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-primary-50: #f9fafb;
+  --color-primary-100: #f3f4f6;
+  --color-primary-200: #e5e7eb;
+  --color-primary-500: #111827;
+  --color-primary-600: #030712;
+  --color-primary-700: #000000;
+  --color-secondary-500: #000000;
+  --color-accent-500: #4b5563;
+
+  /* Overriding standard color spaces for pure Black & White UI */
+  --color-rose-50: #f9fafb;
+  --color-rose-100: #f3f4f6;
+  --color-rose-200: #e5e7eb;
+  --color-rose-300: #d1d5db;
+  --color-rose-400: #9ca3af;
+  --color-rose-500: #111827;
+  --color-rose-600: #030712;
+  --color-rose-700: #000000;
+  --color-rose-800: #000000;
+  --color-rose-900: #000000;
+
+  --color-blue-50: #f9fafb;
+  --color-blue-100: #f3f4f6;
+  --color-blue-200: #e5e7eb;
+  --color-blue-300: #d1d5db;
+  --color-blue-400: #9ca3af;
+  --color-blue-500: #374151;
+  --color-blue-600: #1f2937;
+  --color-blue-700: #111827;
+  --color-blue-800: #111827;
+  --color-blue-900: #030712;
+
+  --color-violet-50: #f9fafb;
+  --color-violet-100: #f3f4f6;
+  --color-violet-200: #e5e7eb;
+  --color-violet-300: #d1d5db;
+  --color-violet-400: #9ca3af;
+  --color-violet-500: #374151;
+  --color-violet-600: #1f2937;
+  --color-violet-700: #111827;
+  --color-violet-800: #111827;
+  --color-violet-900: #030712;
+
+  --color-emerald-50: #f9fafb;
+  --color-emerald-100: #f3f4f6;
+  --color-emerald-200: #e5e7eb;
+  --color-emerald-500: #1f2937;
+  --color-emerald-600: #111827;
+
+  --color-teal-50: #f9fafb;
+  --color-teal-100: #f3f4f6;
+  --color-teal-200: #e5e7eb;
+  --color-teal-500: #1f2937;
+  --color-teal-600: #111827;
+
+  --color-amber-50: #f9fafb;
+  --color-amber-100: #f3f4f6;
+  --color-amber-200: #e5e7eb;
+  --color-amber-500: #1f2937;
+  --color-amber-600: #111827;
+}
+
+/* Custom smooth animations and floating classes */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 5s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 4s ease-in-out infinite;
+}
+
+/* Custom background mesh/glows */
+.mesh-glow {
+  background-image: radial-gradient(circle at 100% 0%, #dbeafe 0%, transparent 40%),
+                    radial-gradient(circle at 0% 100%, #ffe4e6 0%, transparent 40%);
+  background-color: #f8fafc;
+}
+
+/* Sleek Interface Theme Specifics */
+.glow-ring {
+  box-shadow: 0 0 40px 10px rgba(13, 148, 136, 0.12);
+}
+
+.floating-card {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.85);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.floating-card:hover {
+  transform: translateY(-5px);
+}
