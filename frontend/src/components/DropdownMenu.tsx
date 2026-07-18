@@ -78,7 +78,7 @@ export default function DropdownMenu({ onNavigate }: DropdownMenuProps) {
                 className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors text-left cursor-pointer group"
               >
                 <FolderOpen className="w-4 h-4 text-slate-400 group-hover:text-cyan-500 transition-colors" />
-                Study Materials
+                Blogs
               </button>
 
               <div className="h-px bg-slate-100 my-1" />
