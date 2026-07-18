@@ -64,12 +64,23 @@ export default function AdminPage() {
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 4000);
   };
 
-  const authFetch = (url: string, opts: RequestInit = {}) =>
-    fetch(url, { ...opts, headers: { ...((opts.headers as Record<string, string>) || {}), Authorization: `Bearer ${token}` } });
+  const getFileUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    const backendUrl = import.meta.env.VITE_API_URL || '';
+    return `${backendUrl.replace(/\/$/, '')}${url}`;
+  };
+
+  const authFetch = (url: string, opts: RequestInit = {}) => {
+    const apiBase = import.meta.env.VITE_API_URL || '';
+    const fullUrl = url.startsWith('http') ? url : `${apiBase.replace(/\/$/, '')}${url}`;
+    return fetch(fullUrl, { ...opts, headers: { ...((opts.headers as Record<string, string>) || {}), Authorization: `Bearer ${token}` } });
+  };
 
   const loadFolders = () => {
     setFoldersLoading(true);
-    fetch('/api/folders')
+    const apiBase = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiBase.replace(/\/$/, '')}/api/folders`)
       .then(r => r.json())
       .then(d => { if (Array.isArray(d)) setFolders(d); setFoldersLoading(false); })
       .catch(() => setFoldersLoading(false));
@@ -82,7 +93,8 @@ export default function AdminPage() {
     setLoginLoading(true);
     setLoginError('');
     try {
-      const r = await fetch('/api/auth/login', {
+      const apiBase = import.meta.env.VITE_API_URL || '';
+      const r = await fetch(`${apiBase.replace(/\/$/, '')}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
@@ -205,7 +217,8 @@ export default function AdminPage() {
   const loadFolderFiles = async (folder: Folder) => {
     setFolderFilesLoading(true);
     try {
-      const r = await fetch(`/api/folders/${folder._id}`);
+      const apiBase = import.meta.env.VITE_API_URL || '';
+      const r = await fetch(`${apiBase.replace(/\/$/, '')}/api/folders/${folder._id}`);
       const d = await r.json();
       setOpenFolder({
         folder: d.folder || folder,
@@ -736,7 +749,7 @@ export default function AdminPage() {
                             <p className="text-[10px] text-slate-400 truncate">{file.fileName}</p>
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
-                            <a href={file.fileUrl} target="_blank" rel="noreferrer"
+                            <a href={getFileUrl(file.fileUrl)} target="_blank" rel="noreferrer"
                               className="p-1.5 hover:bg-blue-100 rounded-md transition-colors text-slate-300 hover:text-blue-500 cursor-pointer" title="View file">
                               <Eye className="w-3.5 h-3.5" />
                             </a>

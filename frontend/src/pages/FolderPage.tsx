@@ -42,6 +42,13 @@ const SUBFOLDER_ACCENTS = [
   { gradient: 'from-rose-500 to-pink-600', icon: 'text-rose-400' },
 ];
 
+const getFileUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  const backendUrl = import.meta.env.VITE_API_URL || '';
+  return `${backendUrl.replace(/\/$/, '')}${url}`;
+};
+
 export default function FolderPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -53,7 +60,8 @@ export default function FolderPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/folders/${id}`)
+    const apiBase = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiBase.replace(/\/$/, '')}/api/folders/${id}`)
       .then(r => r.json())
       .then(d => {
         if (d.folder) setData(d);
@@ -70,7 +78,7 @@ export default function FolderPage() {
 
   const handleDownload = (file: FileItem) => {
     const a = document.createElement('a');
-    a.href = file.fileUrl;
+    a.href = getFileUrl(file.fileUrl);
     a.download = file.fileName;
     a.target = '_blank';
     document.body.appendChild(a);
@@ -309,10 +317,10 @@ export default function FolderPage() {
               </div>
               <div className="flex-1 overflow-auto p-4 bg-black/20">
                 {viewer.fileType === 'pdf' ? (
-                  <iframe src={viewer.fileUrl} className="w-full rounded-lg" style={{ height: 'calc(90vh - 120px)' }} title={viewer.title} />
+                  <iframe src={getFileUrl(viewer.fileUrl)} className="w-full rounded-lg" style={{ height: 'calc(90vh - 120px)' }} title={viewer.title} />
                 ) : (
                   <div className="flex items-center justify-center h-full min-h-[400px]">
-                    <img src={viewer.fileUrl} alt={viewer.title} className="max-w-full max-h-[70vh] object-contain rounded-xl" />
+                    <img src={getFileUrl(viewer.fileUrl)} alt={viewer.title} className="max-w-full max-h-[70vh] object-contain rounded-xl" />
                   </div>
                 )}
               </div>

@@ -33,7 +33,8 @@ export default function BlogPage() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch('/api/folders')
+    const apiBase = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiBase.replace(/\/$/, '')}/api/folders`)
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data)) setFolders(data);
