@@ -141,37 +141,65 @@ export default function AdminPage() {
     }
   };
 
-  const handleUpload = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedFolderId || !fileTitle.trim()) return;
-    if (uploadMode === 'file' && !fileObj) return;
-    if (uploadMode === 'link' && !driveLink.trim()) return;
-    setUploading(true);
+  const executeUpload = async (
+    folderId: string,
+    title: string,
+    description: string,
+    mode: 'file' | 'link',
+    file: File | null,
+    link: string,
+    setLoadingState: (val: boolean) => void,
+    onSuccess: () => void
+  ) => {
+    if (!folderId || !title.trim()) return;
+    if (mode === 'file' && !file) return;
+    if (mode === 'link' && !link.trim()) return;
+
+    setLoadingState(true);
     try {
       const form = new FormData();
-      form.append('title', fileTitle.trim());
-      form.append('description', fileDesc.trim());
-      if (uploadMode === 'file' && fileObj) {
-        form.append('file', fileObj);
-      } else if (uploadMode === 'link') {
-        form.append('linkUrl', driveLink.trim());
+      form.append('title', title.trim());
+      form.append('description', description.trim());
+      if (mode === 'file' && file) {
+        form.append('file', file);
+      } else if (mode === 'link') {
+        form.append('linkUrl', link.trim());
       }
-      const r = await authFetch(`/api/upload/${selectedFolderId}`, { method: 'POST', body: form });
+      const r = await authFetch(`/api/upload/${folderId}`, { method: 'POST', body: form });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error);
-      toast(`"${fileTitle}" uploaded!`);
-      setFileTitle('');
-      setFileDesc('');
-      setFileObj(null);
-      setDriveLink('');
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      
+      toast(`"${title}" uploaded!`);
+      onSuccess();
       loadFolders();
-      if (openFolder?.folder._id === selectedFolderId) loadFolderFiles(openFolder.folder);
+      if (openFolder?.folder._id === folderId) {
+        loadFolderFiles(openFolder.folder);
+      }
     } catch (err: unknown) {
       toast(err instanceof Error ? err.message : 'Upload failed', 'error');
     } finally {
-      setUploading(false);
+      setLoadingState(false);
     }
+  };
+
+  const handleUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await executeUpload(
+      selectedFolderId,
+      fileTitle,
+      fileDesc,
+      uploadMode,
+      fileObj,
+      driveLink,
+      setUploading,
+      () => {
+        setFileTitle('');
+        setFileDesc('');
+        setFileObj(null);
+        setDriveLink('');
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
+    );
   };
 
   const loadFolderFiles = async (folder: Folder) => {
@@ -235,35 +263,23 @@ export default function AdminPage() {
 
   const handleUploadToCurrentFolder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!openFolder || !subFileTitle.trim()) return;
-    if (subUploadMode === 'file' && !subFileObj) return;
-    if (subUploadMode === 'link' && !subDriveLink.trim()) return;
-    setSubUploading(true);
-    try {
-      const form = new FormData();
-      form.append('title', subFileTitle.trim());
-      form.append('description', subFileDesc.trim());
-      if (subUploadMode === 'file' && subFileObj) {
-        form.append('file', subFileObj);
-      } else if (subUploadMode === 'link') {
-        form.append('linkUrl', subDriveLink.trim());
+    if (!openFolder) return;
+    await executeUpload(
+      openFolder.folder._id,
+      subFileTitle,
+      subFileDesc,
+      subUploadMode,
+      subFileObj,
+      subDriveLink,
+      setSubUploading,
+      () => {
+        setSubFileTitle('');
+        setSubFileDesc('');
+        setSubFileObj(null);
+        setSubDriveLink('');
+        if (subFileInputRef.current) subFileInputRef.current.value = '';
       }
-      const r = await authFetch(`/api/upload/${openFolder.folder._id}`, { method: 'POST', body: form });
-      const d = await r.json();
-      if (!r.ok) throw new Error(d.error);
-      toast(`"${subFileTitle}" uploaded!`);
-      setSubFileTitle('');
-      setSubFileDesc('');
-      setSubFileObj(null);
-      setSubDriveLink('');
-      if (subFileInputRef.current) subFileInputRef.current.value = '';
-      loadFolders();
-      loadFolderFiles(openFolder.folder);
-    } catch (err: unknown) {
-      toast(err instanceof Error ? err.message : 'Upload failed', 'error');
-    } finally {
-      setSubUploading(false);
-    }
+    );
   };
 
   const handleDeleteSubfolder = async (sub: Folder) => {

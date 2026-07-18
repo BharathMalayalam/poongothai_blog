@@ -7,4 +7,9 @@ const folderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+// Indexes for performance optimization
+folderSchema.index({ parentFolderId: 1, createdAt: -1 });
+folderSchema.index({ createdAt: -1 });
+folderSchema.index({ name: 1, parentFolderId: 1 });
+
 export default mongoose.model('Folder', folderSchema);

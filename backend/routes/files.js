@@ -32,7 +32,7 @@ const router = express.Router();
 // POST /api/upload/:folderId — upload file to a folder (admin)
 router.post('/:folderId', requireAuth, upload.single('file'), async (req, res) => {
   try {
-    const folder = await Folder.findById(req.params.folderId);
+    const folder = await Folder.findById(req.params.folderId).lean();
     if (!folder) return res.status(404).json({ error: 'Folder not found' });
 
     const { title, description, linkUrl } = req.body;
@@ -66,14 +66,15 @@ router.post('/:folderId', requireAuth, upload.single('file'), async (req, res) =
     await file.save();
     res.status(201).json(file);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error uploading file:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 // DELETE /api/files/:id — admin
 router.delete('/:id', requireAuth, async (req, res) => {
   try {
-    const file = await File.findByIdAndDelete(req.params.id);
+    const file = await File.findByIdAndDelete(req.params.id).lean();
     if (!file) return res.status(404).json({ error: 'File not found' });
     if (file.fileUrl && file.fileUrl.startsWith('/uploads/')) {
       const filePath = path.join(uploadsDir, path.basename(file.fileUrl));
@@ -81,7 +82,8 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
     res.json({ message: 'File deleted' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error deleting file:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

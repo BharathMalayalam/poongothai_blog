@@ -10,4 +10,8 @@ const fileSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+// Indexes for performance optimization
+fileSchema.index({ folderId: 1, createdAt: -1 });
+fileSchema.index({ createdAt: -1 });
+
 export default mongoose.model('File', fileSchema);
