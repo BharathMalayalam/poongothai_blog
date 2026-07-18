@@ -11,6 +11,9 @@ import { GraduationCap, ArrowUpRight } from 'lucide-react';
 // Component imports
 import DropdownMenu from './components/DropdownMenu';
 
+// Asset imports
+import classroomBg from './assets/images/classroom_bg.jpg';
+
 // Page imports (Code splitting / Lazy load)
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const FolderPage = lazy(() => import('./pages/FolderPage'));
@@ -68,7 +71,7 @@ export default function App() {
         <Route path="/blog/folder/:id" element={<FolderPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/" element={
-          <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans text-white bg-cover bg-center" style={{ backgroundImage: 'url("/src/assets/images/classroom_bg.jpg")' }}>
+          <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans text-white bg-cover bg-center" style={{ backgroundImage: `url(${classroomBg})` }}>
             {/* Backdrop overlay for text contrast */}
             <div className="absolute inset-0 bg-slate-950/75 z-0" />
    
@@ -152,8 +155,7 @@ export default function App() {
                   className="space-y-4"
                 >
                   <h1 className="text-5xl sm:text-6xl lg:text-5xl font-display font-bold italic text-white leading-tight tracking-tight">
-                    Education is not the filling of a pail,<br />
-                    but the lighting of a fire.
+                  Education is the most powerful weapon which you can use to change the world.
                   </h1>
                   <p className="text-base sm:text-lg text-slate-300 font-normal">
                     Inspiring minds and shaping futures.
