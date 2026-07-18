@@ -155,12 +155,13 @@ export default function App() {
                   className="space-y-4"
                 >
                   <h1 className="text-5xl sm:text-6xl lg:text-5xl font-display font-bold italic text-white leading-tight tracking-tight">
-                  Education is the most powerful weapon which you can use to change the world.
+                  Education is the most powerful weapon<br />
+                  which you can use to change the world.
                   </h1>
                   <p className="text-base sm:text-lg text-slate-300 font-normal">
-                    Inspiring minds and shaping futures.
+                   - Nelson Mandela
                   </p>
-                  
+                    
                   {/* Mobile-only responsive Blogs Button */}
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
