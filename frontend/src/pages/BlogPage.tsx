@@ -59,26 +59,26 @@ export default function BlogPage() {
       style={{ backgroundImage: 'radial-gradient(circle at 80% 10%, #ffe4e644 0%, transparent 40%), radial-gradient(circle at 5% 90%, #dbeafe44 0%, transparent 40%)' }}>
 
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-30">
+      <header className="bg-blue-950/95 backdrop-blur-md border-b border-blue-900/50 sticky top-0 z-30 shadow-md">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center text-white shadow-sm">
               <GraduationCap className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-sm font-extrabold text-slate-900 font-display leading-none">Dr. M. Poongothai<span className="text-blue-600 font-bold">.</span></p>
-              <p className="text-[10px] text-slate-400 font-mono mt-0.5">Academic Library</p>
+              <p className="text-sm font-extrabold text-white font-display leading-none">Dr. M. Poongothai<span className="text-rose-400 font-bold">.</span></p>
+              <p className="text-[10px] text-blue-200/60 font-mono mt-0.5">Academic Library</p>
             </div>
           </div>
 
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-            <button onClick={() => navigate('/')} className="hover:text-rose-600 transition-colors flex items-center gap-1 cursor-pointer">
+          <nav className="flex items-center gap-1.5 text-xs text-blue-100/80 font-medium">
+            <button onClick={() => navigate('/')} className="hover:text-rose-400 transition-colors flex items-center gap-1 cursor-pointer">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Home</span>
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-            <span className="text-slate-800 font-semibold">Study Materials</span>
+            <ChevronRight className="w-3.5 h-3.5 text-blue-800" />
+            <span className="text-white font-semibold">Study Materials</span>
           </nav>
         </div>
       </header>

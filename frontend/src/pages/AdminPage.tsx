@@ -486,9 +486,9 @@ export default function AdminPage() {
                   <Upload className="w-6 h-6 text-slate-400 group-hover:text-blue-500 transition-colors" />
                   <span className="text-xs text-slate-500 text-center">
                     {fileObj ? <span className="text-blue-600 font-semibold">{fileObj.name}</span>
-                      : <>Click to select<br /><span className="text-slate-400">PDF, JPG, PNG (max 25MB)</span></>}
+                      : <>Click to select<br /><span className="text-slate-400">Any file format (max 25MB)</span></>}
                   </span>
-                  <input ref={fileInputRef} type="file" accept=".pdf,image/*" className="sr-only"
+                  <input ref={fileInputRef} type="file" className="sr-only"
                     onChange={e => setFileObj(e.target.files?.[0] ?? null)} />
                 </label>
               ) : (
@@ -671,7 +671,6 @@ export default function AdminPage() {
                               <input 
                                 ref={subFileInputRef}
                                 type="file" 
-                                accept=".pdf,image/*" 
                                 className="sr-only"
                                 onChange={e => setSubFileObj(e.target.files?.[0] ?? null)} 
                               />
@@ -752,8 +751,25 @@ export default function AdminPage() {
                     <div className="flex flex-col gap-2">
                       {openFolder.files.map(file => (
                         <div key={file._id} className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${file.fileType === 'pdf' ? 'bg-red-100' : 'bg-blue-100'}`}>
-                            {file.fileType === 'pdf' ? <FileText className="w-4 h-4 text-red-500" /> : <Image className="w-4 h-4 text-blue-500" />}
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                            file.fileType === 'pdf' ? 'bg-red-100' :
+                            file.fileType === 'image' ? 'bg-blue-100' :
+                            ['doc', 'docx', 'txt'].includes(file.fileType.toLowerCase()) ? 'bg-sky-100' :
+                            ['xls', 'xlsx'].includes(file.fileType.toLowerCase()) ? 'bg-emerald-100' :
+                            ['ppt', 'pptx'].includes(file.fileType.toLowerCase()) ? 'bg-amber-100' :
+                            'bg-slate-100'
+                          }`}>
+                            {file.fileType === 'image' ? (
+                              <Image className="w-4 h-4 text-blue-500" />
+                            ) : (
+                              <FileText className={`w-4 h-4 ${
+                                file.fileType === 'pdf' ? 'text-red-500' :
+                                ['doc', 'docx', 'txt'].includes(file.fileType.toLowerCase()) ? 'text-sky-600' :
+                                ['xls', 'xlsx'].includes(file.fileType.toLowerCase()) ? 'text-emerald-600' :
+                                ['ppt', 'pptx'].includes(file.fileType.toLowerCase()) ? 'text-amber-600' :
+                                'text-slate-500'
+                              }`} />
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-slate-800 truncate">{file.title}</p>

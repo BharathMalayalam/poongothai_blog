@@ -5,7 +5,7 @@ const fileSchema = new mongoose.Schema({
   description: { type: String, default: '' },
   fileUrl: { type: String, required: true },
   fileName: { type: String, required: true },
-  fileType: { type: String, enum: ['pdf', 'image'], required: true },
+  fileType: { type: String, required: true },
   folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', required: true },
   createdAt: { type: Date, default: Date.now },
 });

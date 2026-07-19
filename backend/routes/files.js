@@ -20,9 +20,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-  if (allowed.includes(file.mimetype)) cb(null, true);
-  else cb(new Error('Only PDF and image files are allowed'), false);
+  cb(null, true);
 };
 
 const upload = multer({ storage, fileFilter, limits: { fileSize: 25 * 1024 * 1024 } }); // 25MB
@@ -43,14 +41,15 @@ router.post('/:folderId', requireAuth, upload.single('file'), async (req, res) =
     let fileType = 'pdf';
 
     if (req.file) {
+      const ext = path.extname(req.file.originalname).toLowerCase().replace('.', '');
       const isImage = req.file.mimetype.startsWith('image/');
-      fileType = isImage ? 'image' : 'pdf';
+      fileType = isImage ? 'image' : (ext || 'pdf');
       fileUrl = `/uploads/${req.file.filename}`;
       fileName = req.file.originalname;
     } else if (linkUrl) {
       fileUrl = linkUrl.trim();
       fileName = 'Google Drive Link';
-      fileType = 'pdf';
+      fileType = 'link';
     } else {
       return res.status(400).json({ error: 'No file uploaded and no link provided' });
     }
