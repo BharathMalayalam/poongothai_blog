@@ -272,47 +272,59 @@ export default function FolderPage() {
                   </h2>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filtered.map((file, i) => (
-                    <motion.div
-                      key={file._id}
-                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                      className="bg-white border border-slate-200/60 rounded-2xl p-5 group hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-                    >
-                      {(() => {
-                        const fileMeta = getFileIconAndStyle(file.fileType);
-                        return (
-                          <div className="flex items-start justify-between mb-3">
+                  {filtered.map((file, i) => {
+                    const fileMeta = getFileIconAndStyle(file.fileType);
+                    return (
+                      <motion.div
+                        key={file._id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="bg-white border border-slate-200/60 rounded-2xl p-4 sm:p-5 group hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+                      >
+                        <div className="flex flex-col sm:block w-full">
+                          {/* Desktop Only: Icon & Badge */}
+                          <div className="hidden sm:flex items-start justify-between mb-3">
                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md ${fileMeta.bg}`}>
                               {fileMeta.icon === 'image' ? <Image className="w-6 h-6 text-white" /> : <FileText className="w-6 h-6 text-white" />}
                             </div>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${fileMeta.badge}`}>{file.fileType.toUpperCase()}</span>
                           </div>
-                        );
-                      })()}
 
-                      <h3 className="font-display font-bold text-slate-900 text-base mb-1 line-clamp-2 group-hover:text-rose-600 transition-colors">{file.title}</h3>
-                      {file.description && <p className="text-sm text-slate-500 line-clamp-2 mb-4">{file.description}</p>}
-                      {!file.description && <div className="mb-4" />}
+                          {/* Responsive Layout Container */}
+                          <div className="flex flex-row items-center justify-between sm:block w-full gap-4">
+                            {/* Info Area (Title & Mobile Badge) */}
+                            <div className="min-w-0 flex-1 sm:block">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="font-display font-bold text-slate-900 text-sm sm:text-base truncate sm:line-clamp-2 group-hover:text-rose-600 transition-colors">{file.title}</h3>
+                                <span className={`sm:hidden text-[8px] font-bold px-1.5 py-0.5 rounded-full border shrink-0 ${fileMeta.badge}`}>{file.fileType.toUpperCase()}</span>
+                              </div>
+                              {file.description && <p className="hidden sm:block text-sm text-slate-500 line-clamp-2 mt-1 sm:mb-4">{file.description}</p>}
+                            </div>
 
-                      <div className="flex gap-2 pt-3 border-t border-slate-100">
-                        <button
-                          onClick={() => {
-                            if (file.fileUrl.startsWith('http')) window.open(file.fileUrl, '_blank', 'noopener,noreferrer');
-                            else setViewer(file);
-                          }}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/60"
-                        >
-                          <Eye className="w-3.5 h-3.5" /> View
-                        </button>
-                        <button
-                          onClick={() => handleDownload(file)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/60"
-                        >
-                          <Download className="w-3.5 h-3.5" /> Download
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
+                            {/* Buttons Area */}
+                            <div className="flex gap-2 pt-0 sm:pt-3 border-t-0 sm:border-t border-slate-100 shrink-0">
+                              <button
+                                onClick={() => {
+                                  if (file.fileUrl.startsWith('http')) window.open(file.fileUrl, '_blank', 'noopener,noreferrer');
+                                  else setViewer(file);
+                                }}
+                                className="flex items-center justify-center gap-1.5 py-1.5 px-3 sm:py-2 sm:px-4 sm:flex-1 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/60 whitespace-nowrap"
+                              >
+                                <Eye className="hidden sm:inline-block w-3.5 h-3.5" /> View
+                              </button>
+                              <button
+                                onClick={() => handleDownload(file)}
+                                className="flex items-center justify-center gap-1.5 py-1.5 px-3 sm:py-2 sm:px-4 sm:flex-1 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/60 whitespace-nowrap"
+                              >
+                                <Download className="hidden sm:inline-block w-3.5 h-3.5" /> Download
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
             )}
