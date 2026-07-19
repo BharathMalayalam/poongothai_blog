@@ -71,10 +71,28 @@ export default function AdminPage() {
     return `${backendUrl.replace(/\/$/, '')}${url}`;
   };
 
-  const authFetch = (url: string, opts: RequestInit = {}) => {
+  const handleLogout = () => {
+    localStorage.removeItem('admin_token');
+    setToken('');
+    setFolders([]);
+    setOpenFolder(null);
+  };
+
+  const authFetch = async (url: string, opts: RequestInit = {}) => {
     const apiBase = import.meta.env.VITE_API_URL || '';
     const fullUrl = url.startsWith('http') ? url : `${apiBase.replace(/\/$/, '')}${url}`;
-    return fetch(fullUrl, { ...opts, headers: { ...((opts.headers as Record<string, string>) || {}), Authorization: `Bearer ${token}` } });
+    const response = await fetch(fullUrl, {
+      ...opts,
+      headers: {
+        ...((opts.headers as Record<string, string>) || {}),
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (response.status === 401) {
+      handleLogout();
+      throw new Error('Session expired or unauthorized. Please log in again.');
+    }
+    return response;
   };
 
   const loadFolders = () => {
@@ -108,13 +126,6 @@ export default function AdminPage() {
     } finally {
       setLoginLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('admin_token');
-    setToken('');
-    setFolders([]);
-    setOpenFolder(null);
   };
 
   const handleCreateFolder = async (e: React.FormEvent) => {
